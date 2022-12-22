@@ -16,6 +16,60 @@ my_pca <- prcomp(test2, scale = TRUE,
                 center = TRUE, retx = T)
 
 
+df <- data.frame(aFile)
+
+> test1<-read.table(text="
+> 0.141  0.242  0.342
+> 0.224  0.342  0.334
+> 0.652  0.682  0.182
+> ",sep="",header=FALSE)
+>  #Read data
+> test1
+>  #   V1    V2    V3
+> #1 0.141 0.242 0.342
+> #2 0.224 0.342 0.334
+> #3 0.652 0.682 0.182
+> 
+> 
+> #Convert to matrix as it is that you wanted
+> test2<-as.matrix(test1)
+> colnames(test2)<-NULL
+> genelist<-c("Fkh2","Swi5","Sic11","Sic12","Sic13","Sic14","Sic15","Sic16","Sic17","Sic18","Sic19")
+> rownames(test2)<-genelist
+> test2
+> #      [,1]  [,2]  [,3]
+> #Fkh2 0.141 0.242 0.342
+> #Swi5 0.224 0.342 0.334
+> #Sic1 0.652 0.682 0.182
+> 
+> #2nd case: As in your example,
+> test1<-read.table(text="
+> IMAGE:152 0.141  0.242  0.342
+> IMAGE:262 0.224  0.342  0.334
+> IMAGE:342 0.652  0.682  0.182
+> ",sep="",header=FALSE)
+> 
+> test2<-as.matrix(test1[-1])
+> colnames(test2)<-NULL
+> genelist<-c("Fkh2","Swi5","Sic1")
+> rownames(test2)<-genelist
+> test2
+> #      [,1]  [,2]  [,3]
+> #Fkh2 0.141 0.242 0.342
+> #Swi5 0.224 0.342 0.334
+> #Sic1 0.652 0.682 0.182
+> 
+
+
+
+# Loading Data
+data(mtcars)
+ 
+# Apply PCA using prcomp function
+# Need to scale / Normalize as
+# PCA depends on distance measure
+my_pca <- prcomp(mtcars, scale = TRUE,
+                center = TRUE, retx = T)
 names(my_pca)
  
 # Summary
@@ -77,59 +131,3 @@ rpart.model <- rpart(disp ~ .,
                     data = train.data, method = "anova")
  
 rpart.plot(rpart.model)
-
-
-
-
-> test1<-read.table(text="
-> 0.141  0.242  0.342
-> 0.224  0.342  0.334
-> 0.652  0.682  0.182
-> ",sep="",header=FALSE)
->  #Read data
-> test1
->  #   V1    V2    V3
-> #1 0.141 0.242 0.342
-> #2 0.224 0.342 0.334
-> #3 0.652 0.682 0.182
-> 
-> 
-> #Convert to matrix as it is that you wanted
-> test2<-as.matrix(test1)
-> colnames(test2)<-NULL
-> genelist<-c("Fkh2","Swi5","Sic11","Sic12","Sic13","Sic14","Sic15","Sic16","Sic17","Sic18","Sic19")
-> rownames(test2)<-genelist
-> test2
-> #      [,1]  [,2]  [,3]
-> #Fkh2 0.141 0.242 0.342
-> #Swi5 0.224 0.342 0.334
-> #Sic1 0.652 0.682 0.182
-> 
-> #2nd case: As in your example,
-> test1<-read.table(text="
-> IMAGE:152 0.141  0.242  0.342
-> IMAGE:262 0.224  0.342  0.334
-> IMAGE:342 0.652  0.682  0.182
-> ",sep="",header=FALSE)
-> 
-> test2<-as.matrix(test1[-1])
-> colnames(test2)<-NULL
-> genelist<-c("Fkh2","Swi5","Sic1")
-> rownames(test2)<-genelist
-> test2
-> #      [,1]  [,2]  [,3]
-> #Fkh2 0.141 0.242 0.342
-> #Swi5 0.224 0.342 0.334
-> #Sic1 0.652 0.682 0.182
-> 
-
-
-
-# Loading Data
-data(mtcars)
- 
-# Apply PCA using prcomp function
-# Need to scale / Normalize as
-# PCA depends on distance measure
-my_pca <- prcomp(mtcars, scale = TRUE,
-                center = TRUE, retx = T)
