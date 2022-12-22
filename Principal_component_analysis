@@ -1,0 +1,89 @@
+
+library(tm)
+
+library(readxl)
+
+
+path <- "C:/Users/kahn/Documents/Book2.xlsx"
+aFile <- read_excel(path)
+
+test2<-as.matrix(aFile)
+colnames(test2)<-NULL
+genelist<-c("Fkh2","Swi5","Sic11","Sic12","Sic13","Sic14","Sic15","Sic16","Sic17","Sic18","Sic19")
+rownames(test2)<-genelist
+
+
+df <- data.frame(aFile)
+
+> test1<-read.table(text="
+> 0.141  0.242  0.342
+> 0.224  0.342  0.334
+> 0.652  0.682  0.182
+> ",sep="",header=FALSE)
+>  #Read data
+> test1
+>  #   V1    V2    V3
+> #1 0.141 0.242 0.342
+> #2 0.224 0.342 0.334
+> #3 0.652 0.682 0.182
+> 
+> 
+> #Convert to matrix as it is that you wanted
+> test2<-as.matrix(test1)
+> colnames(test2)<-NULL
+> genelist<-c("Fkh2","Swi5","Sic11","Sic12","Sic13","Sic14","Sic15","Sic16","Sic17","Sic18","Sic19")
+> rownames(test2)<-genelist
+> test2
+> #      [,1]  [,2]  [,3]
+> #Fkh2 0.141 0.242 0.342
+> #Swi5 0.224 0.342 0.334
+> #Sic1 0.652 0.682 0.182
+> 
+> #2nd case: As in your example,
+> test1<-read.table(text="
+> IMAGE:152 0.141  0.242  0.342
+> IMAGE:262 0.224  0.342  0.334
+> IMAGE:342 0.652  0.682  0.182
+> ",sep="",header=FALSE)
+> 
+> test2<-as.matrix(test1[-1])
+> colnames(test2)<-NULL
+> genelist<-c("Fkh2","Swi5","Sic1")
+> rownames(test2)<-genelist
+> test2
+> #      [,1]  [,2]  [,3]
+> #Fkh2 0.141 0.242 0.342
+> #Swi5 0.224 0.342 0.334
+> #Sic1 0.652 0.682 0.182
+> 
+
+
+myDTM = TermDocumentMatrix(df, control = list(minWordLength = 1))
+
+m = as.matrix(myDTM)
+
+
+df_aFile <- df[,c("title")]
+
+myCorpus = Corpus(VectorSource(df_aFile))
+ 
+myCorpus = tm_map(myCorpus, content_transformer(tolower))
+myCorpus = tm_map(myCorpus, removePunctuation)
+myCorpus = tm_map(myCorpus, removeNumbers)
+myCorpus = tm_map(myCorpus, removeWords, stopwords("english"))
+ 
+myDTM = TermDocumentMatrix(myCorpus, control = list(minWordLength = 1))
+ 
+m = as.matrix(myDTM)
+ 
+v = sort(rowSums(m), decreasing = TRUE)
+
+d <- data.frame(word = names(v),freq=v)
+
+set.seed(1234)
+
+		 
+wordcloud(words = d$word, freq = d$freq, min.freq = 2,
+          max.words=50, random.order=FALSE, rot.per=0.1, 
+          colors=brewer.pal(8, "Dark2"))
+	  
